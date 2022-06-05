@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-
+import '../styles/main.css';
+import Panel from './components/Panel';
 /**
- * Current code for generate random sequence.
+ * Current code for generate random sequence
  * TODO: Push down to Sequence. Generate while at certain level. Wire in panel buttons.
  */
 function DigitSpan() {
@@ -25,6 +26,7 @@ function DigitSpan() {
       <p>Current digit: {digit}</p>
       <br></br>
       <p>Recorded Sequence: {recorded}</p>
+      <Panel />
     </div>
   );
 }
