@@ -10,6 +10,7 @@ function DigitSpan() {
   const [recorded, setRecorded] = useState([]);
   const [entry, setEntry] = useState(0);
   const [checkrecord, setCheckRecord] = useState([]);
+  const [initialized, setInitialized] = useState(false);
   // level is equivalent to score
   const [flagobj, setFlagObj] = useState({
     guessing: false,
@@ -26,6 +27,26 @@ function DigitSpan() {
     // setTimeout(() => {
     // }, 500);
   }
+  useEffect(() => {
+    if (!initialized && !gameOver) {
+      let temp = [];
+      for (let i = 0; i < level; i++) {
+        let randomized = Math.floor(Math.random() * 9) + 1;
+        temp.push(randomized);
+        console.log('i ', i, 'rec ', recorded);
+      }
+      setRecorded(temp);
+      setCheckRecord(recorded);
+      setInitialized(true);
+    }
+    if (initialized && !gameOver) {
+      setFlagObj({
+        ...flagobj,
+        guessing: true
+      });
+    }
+  }, [initialized]);
+
   const handleClick = (e) => {
     if (guessing) {
       buttonRef.current = e.target.id;
@@ -34,68 +55,68 @@ function DigitSpan() {
       //console.log('checking entry: ', parseInt(buttonRef.current));
       let clickedInt = parseInt(buttonRef.current);
       //setEntry(Number(buttonRef.current));
-      setCheckRecord(recorded);
-      if (checkrecord.length === 0) {
-        setRecorded([]);
-        // setEntry([]);
-        console.log('levelUp!');
-        let inc_level = level + 1;
-        setFlagObj({
-          ...flagobj,
-          level: inc_level,
-          guessing: false
-        });
-        return;
+      let checked = recorded;
+      console.log('clicked: ', clickedInt, ' checkrecord: ', checked);
+      if (clickedInt === checked[0]) {
+        // let temp = checkrecord;
+        checked.splice(0, 1);
+        //  setCheckRecord(temp);
+        console.log('checkrecord ', checked);
+        if (checked.length === 0) {
+          setRecorded([]);
+          // setEntry([]);
+          console.log('levelUp!');
+          let inc_level = level + 1;
+          setFlagObj({
+            ...flagobj,
+            level: inc_level,
+            guessing: false
+          });
+          setInitialized(false);
+          //return;
+        }
       }
-      if (clickedInt === checkrecord[0]) {
-        let temp = checkrecord;
-        temp.splice(0, 1);
-        setCheckRecord(temp);
-      }
-      if (clickedInt !== checkrecord[0]) {
+      if (clickedInt !== checked[0]) {
         console.log('Game Over');
         setFlagObj({
           ...flagobj,
           gameOver: true,
           guessing: false
         });
+        setInitialized(false);
       }
     }
 
   }
 
-  const handleGuessing = () => {
+  // const handleGuessing = () => {
 
-  }
+  // }
 
-  useEffect(() => {
-    console.log('outside if useEffect');
-    // if (flagobj.gameOver == true) {
-    //   console.log('Hit game over condition...');
-    //   return;
-    // }
-    if (!gameOver) {
-      console.log('in game over if ');
-      if (!guessing) {
-        console.log('entries useEffect');
-        let temp_entries = [];
-        for (let i = 0; i < level; i++) {
-          let random = randomizeDigit();
-          temp_entries.push(random);
-          setRecorded(temp_entries);
-        }
-        setFlagObj({
-          ...flagobj,
-          guessing: true
-        });
-      }
-      if (guessing) {
-        console.log('guessing useEffect');
-        //handleGuessing();
-        console.log('line 75: ', flagobj);
-      }
-    }
-  }, [guessing]);
+  // useEffect(() => {
+  //   console.log('outside if useEffect');
+  //   // if (flagobj.gameOver == true) {
+  //   //   console.log('Hit game over condition...');
+  //   //   return;
+  //   // }
+  //   // if (gameOver) {
+  //   //   console.log('Game over...');
+
+  //   // }
+  //   if (!gameOver && initialized) {
+  //     console.log('in game over if ');
+  //     if (!guessing) {
+  //       console.log('entries useEffect');
+
+  //       console.log('record ', recorded);
+  //     }
+  //     if (guessing) {
+  //       console.log('guessing useEffect');
+  //       //handleGuessing();
+  //       console.log('line 75: ', flagobj);
+  //     }
+  //   }
+  // }, [guessing, initialized]);
 
 
   return (
