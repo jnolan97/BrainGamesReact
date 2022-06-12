@@ -4,27 +4,22 @@ import Panel from './components/Panel';
 import Score from './components/Score';
 /**
  * Current code for generate random sequence
- * TODO: Push down to Sequence. Generate while at certain level. Wire in panel buttons.
+ * TODO 06/12/22: Add accurate UI logic to reflect flashes and guesses
  */
 function DigitSpan() {
   const [recorded, setRecorded] = useState([]);
   const [initialized, setInitialized] = useState(false);
   // level is equivalent to score
   const [flagobj, setFlagObj] = useState({
-    guessing: false,
     gameOver: false,
     level: 5
   });
-  const buttonRef = useRef(null);
 
-  const { guessing, gameOver, level } = flagobj;
-
-  // Fresh Start (ish?) 06/12/22
+  const { gameOver, level } = flagobj;
   const [currententry, setCurrentEntry] = useState(null);
   const [index, setIndex] = useState(0);
   useEffect(() => {
     if (currententry && initialized && !gameOver) {
-      console.log('currIdx: ', index, ' el: ', recorded[index]);
       if (currententry !== recorded[index]) {
         setFlagObj({
           ...flagobj,
@@ -66,9 +61,7 @@ function DigitSpan() {
   }, [initialized]);
 
   const handleClick = (e) => {
-    buttonRef.current = e.target.id;
     setCurrentEntry(parseInt(e.target.id));
-    console.log('entry: ', currententry);
 
   }
 
