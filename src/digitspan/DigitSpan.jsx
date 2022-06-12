@@ -33,6 +33,13 @@ function DigitSpan() {
         });
       } else if (index == recorded.length - 1) {
         console.log('WINNNERRRR');
+        setCurrentEntry(null);
+        setIndex(0);
+        setFlagObj({
+          ...flagobj,
+          level: level + 1
+        });
+        setInitialized(false);
       }
       else {
         setIndex(index + 1);
@@ -55,12 +62,6 @@ function DigitSpan() {
       }
       setRecorded(temp);
       setInitialized(true);
-      // }
-      // if (initialized && !gameOver) {
-      //   setFlagObj({
-      //     ...flagobj,
-      //     guessing: true
-      //   });
     }
   }, [initialized]);
 
@@ -68,76 +69,8 @@ function DigitSpan() {
     buttonRef.current = e.target.id;
     setCurrentEntry(parseInt(e.target.id));
     console.log('entry: ', currententry);
-    // if (guessing) {
-    //   buttonRef.current = e.target.id;
-    //   console.log(buttonRef.current);
-    //   //setEntry(parseInt(buttonRef.current));
-    //   //console.log('checking entry: ', parseInt(buttonRef.current));
-    //   let clickedInt = parseInt(buttonRef.current);
-    //   //setEntry(Number(buttonRef.current));
-    //   let checked = recorded;
-    //   console.log('clicked: ', clickedInt, ' checkrecord: ', checked);
-    //   if (clickedInt === checked[0]) {
-    //     // let temp = checkrecord;
-    //     checked.splice(0, 1);
-    //     //  setCheckRecord(temp);
-    //     console.log('checkrecord ', checked);
-    //     if (checked.length === 0) {
-    //       setRecorded([]);
-    //       // setEntry([]);
-    //       console.log('levelUp!');
-    //       let inc_level = level + 1;
-    //       setFlagObj({
-    //         ...flagobj,
-    //         level: inc_level,
-    //         guessing: false
-    //       });
-    //       setInitialized(false);
-    //       //return;
-    //     }
-    //   }
-    //   if (clickedInt !== checked[0]) {
-    //     console.log('Game Over');
-    //     setFlagObj({
-    //       ...flagobj,
-    //       gameOver: true,
-    //       guessing: false
-    //     });
-    //     setInitialized(false);
-    //   }
-    // }
 
   }
-
-  // const handleGuessing = () => {
-
-  // }
-
-  // useEffect(() => {
-  //   console.log('outside if useEffect');
-  //   // if (flagobj.gameOver == true) {
-  //   //   console.log('Hit game over condition...');
-  //   //   return;
-  //   // }
-  //   // if (gameOver) {
-  //   //   console.log('Game over...');
-
-  //   // }
-  //   if (!gameOver && initialized) {
-  //     console.log('in game over if ');
-  //     if (!guessing) {
-  //       console.log('entries useEffect');
-
-  //       console.log('record ', recorded);
-  //     }
-  //     if (guessing) {
-  //       console.log('guessing useEffect');
-  //       //handleGuessing();
-  //       console.log('line 75: ', flagobj);
-  //     }
-  //   }
-  // }, [guessing, initialized]);
-
 
   return (
     <div className="digitspan-container">
