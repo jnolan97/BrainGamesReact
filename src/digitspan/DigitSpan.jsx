@@ -8,8 +8,6 @@ import Score from './components/Score';
  */
 function DigitSpan() {
   const [recorded, setRecorded] = useState([]);
-  const [entry, setEntry] = useState(0);
-  const [checkrecord, setCheckRecord] = useState([]);
   const [initialized, setInitialized] = useState(false);
   // level is equivalent to score
   const [flagobj, setFlagObj] = useState({
@@ -21,6 +19,26 @@ function DigitSpan() {
 
   const { guessing, gameOver, level } = flagobj;
 
+  // Fresh Start (ish?) 06/12/22
+  const [currententry, setCurrentEntry] = useState(null);
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    if (currententry && initialized && !gameOver) {
+      console.log('currIdx: ', index, ' el: ', recorded[index]);
+      if (currententry !== recorded[index]) {
+        setFlagObj({
+          ...flagobj,
+          gameOver: true,
+          guessing: false
+        });
+      } else if (index == recorded.length - 1) {
+        console.log('WINNNERRRR');
+      }
+      else {
+        setIndex(index + 1);
+      }
+    }
+  }, [initialized, currententry])
   const randomizeDigit = () => {
     let num = Math.floor(Math.random() * 9) + 1;
     return num;
@@ -36,56 +54,58 @@ function DigitSpan() {
         console.log('i ', i, 'rec ', recorded);
       }
       setRecorded(temp);
-      setCheckRecord(recorded);
       setInitialized(true);
-    }
-    if (initialized && !gameOver) {
-      setFlagObj({
-        ...flagobj,
-        guessing: true
-      });
+      // }
+      // if (initialized && !gameOver) {
+      //   setFlagObj({
+      //     ...flagobj,
+      //     guessing: true
+      //   });
     }
   }, [initialized]);
 
   const handleClick = (e) => {
-    if (guessing) {
-      buttonRef.current = e.target.id;
-      console.log(buttonRef.current);
-      //setEntry(parseInt(buttonRef.current));
-      //console.log('checking entry: ', parseInt(buttonRef.current));
-      let clickedInt = parseInt(buttonRef.current);
-      //setEntry(Number(buttonRef.current));
-      let checked = recorded;
-      console.log('clicked: ', clickedInt, ' checkrecord: ', checked);
-      if (clickedInt === checked[0]) {
-        // let temp = checkrecord;
-        checked.splice(0, 1);
-        //  setCheckRecord(temp);
-        console.log('checkrecord ', checked);
-        if (checked.length === 0) {
-          setRecorded([]);
-          // setEntry([]);
-          console.log('levelUp!');
-          let inc_level = level + 1;
-          setFlagObj({
-            ...flagobj,
-            level: inc_level,
-            guessing: false
-          });
-          setInitialized(false);
-          //return;
-        }
-      }
-      if (clickedInt !== checked[0]) {
-        console.log('Game Over');
-        setFlagObj({
-          ...flagobj,
-          gameOver: true,
-          guessing: false
-        });
-        setInitialized(false);
-      }
-    }
+    buttonRef.current = e.target.id;
+    setCurrentEntry(parseInt(e.target.id));
+    console.log('entry: ', currententry);
+    // if (guessing) {
+    //   buttonRef.current = e.target.id;
+    //   console.log(buttonRef.current);
+    //   //setEntry(parseInt(buttonRef.current));
+    //   //console.log('checking entry: ', parseInt(buttonRef.current));
+    //   let clickedInt = parseInt(buttonRef.current);
+    //   //setEntry(Number(buttonRef.current));
+    //   let checked = recorded;
+    //   console.log('clicked: ', clickedInt, ' checkrecord: ', checked);
+    //   if (clickedInt === checked[0]) {
+    //     // let temp = checkrecord;
+    //     checked.splice(0, 1);
+    //     //  setCheckRecord(temp);
+    //     console.log('checkrecord ', checked);
+    //     if (checked.length === 0) {
+    //       setRecorded([]);
+    //       // setEntry([]);
+    //       console.log('levelUp!');
+    //       let inc_level = level + 1;
+    //       setFlagObj({
+    //         ...flagobj,
+    //         level: inc_level,
+    //         guessing: false
+    //       });
+    //       setInitialized(false);
+    //       //return;
+    //     }
+    //   }
+    //   if (clickedInt !== checked[0]) {
+    //     console.log('Game Over');
+    //     setFlagObj({
+    //       ...flagobj,
+    //       gameOver: true,
+    //       guessing: false
+    //     });
+    //     setInitialized(false);
+    //   }
+    // }
 
   }
 
